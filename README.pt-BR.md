@@ -8,65 +8,44 @@ O objetivo é substituir a criação manual de slides por um fluxo repetível co
 
 ## Instalação
 
-### A Partir Do Repositório Clonado
+Existem apenas dois modos de instalação suportados:
 
-Instalar globalmente para Codex:
+### Opção 1: Instalação Local No Projeto
 
-```bash
-python3 scripts/install.py --scope global --agents codex
-```
-
-Instalar localmente no projeto atual para Codex:
-
-```bash
-python3 scripts/install.py --scope local --agents codex --project .
-```
-
-Instalar localmente para vários agentes de código:
-
-```bash
-python3 scripts/install.py --scope local --agents all --project .
-```
-
-Você também pode usar o wrapper shell:
-
-```bash
-./install.sh --scope global --agents codex
-```
-
-Depois invoque a skill no Codex:
-
-```text
-Use $html-presentation-skill para transformar este documento em uma apresentação HTML interativa e bem acabada.
-```
-
-### Instalação Em Uma Linha Pelo GitHub
-
-Depois de publicar o repositório, usuários poderão instalar diretamente com um clone temporário:
-
-```bash
-tmpdir="$(mktemp -d)" && git clone https://github.com/defreitassl/html-presentation-skill.git "$tmpdir" && python3 "$tmpdir/scripts/install.py" --scope global --agents codex
-```
-
-Instalação local multi-agente:
+Use quando quiser que a skill fique disponível apenas dentro do projeto atual:
 
 ```bash
 tmpdir="$(mktemp -d)" && git clone https://github.com/defreitassl/html-presentation-skill.git "$tmpdir" && python3 "$tmpdir/scripts/install.py" --scope local --agents all --project .
 ```
 
-## Suporte Multi-Agente
+Isso instala a skill no projeto atual e cria arquivos locais de instrução para os agentes suportados quando aplicável:
 
-A skill é nativa para Codex por causa do `SKILL.md`. O instalador também pode criar arquivos locais de instrução para outros agentes de código:
+- Codex: `.codex/skills/html-presentation-skill`
+- Claude Code: `CLAUDE.md`
+- GitHub Copilot: `.github/copilot-instructions.md`
+- Antigravity ou outros agentes: `AGENTS.md`
+
+### Opção 2: Instalação Global Nas Configurações Do Agente
+
+Use quando quiser que a skill fique disponível globalmente nas configurações do agente:
 
 ```bash
-python3 scripts/install.py --scope local --agents claude,copilot,antigravity --project /caminho/do/projeto
+tmpdir="$(mktemp -d)" && git clone https://github.com/defreitassl/html-presentation-skill.git "$tmpdir" && python3 "$tmpdir/scripts/install.py" --scope global --agents codex
 ```
 
-Isso cria ou atualiza:
+No momento, a instalação global aponta para Codex:
 
-- `CLAUDE.md` para Claude Code.
-- `.github/copilot-instructions.md` para GitHub Copilot.
-- `AGENTS.md` como arquivo genérico de instruções de projeto para Antigravity ou outros agentes de código.
+- Codex: `${CODEX_HOME:-$HOME/.codex}/skills/html-presentation-skill`
+
+Depois invoque a skill:
+
+```text
+Use $html-presentation-skill para transformar este documento em uma apresentação HTML interativa e bem acabada.
+```
+
+## Suporte Multi-Agente
+
+A skill é nativa para Codex por causa do `SKILL.md`. Para Claude Code, GitHub Copilot, Antigravity e outros agentes de código, use a instalação local no projeto. Ela cria arquivos de instrução que apontam o agente para as instruções da skill.
 
 Nesses agentes, peça diretamente:
 
