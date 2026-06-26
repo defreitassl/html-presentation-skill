@@ -1,0 +1,7 @@
+interface:
+  display_name: "HTML Presentation Skill"
+  short_description: "Build interactive HTML presentations"
+  default_prompt: "Use $html-presentation-skill to transform this source material into a polished, responsive, interactive standalone HTML presentation."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --ink: #142033;
+      --muted: #536273;
+      --line: #d8e0ea;
+      --primary: #2563eb;
+      --accent: #0f8f72;
+      --warning: #b7791f;
+      --dark: #111827;
+      --radius: 8px;
+      --shadow: 0 16px 42px rgba(20, 32, 51, .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, .75);
+      outline-offset: 3px;
+    }
+    .progress {
+      position: fixed;
+      inset: 0 0 auto;
+      height: 4px;
+      transform-origin: left;
+      transform: scaleX(0);
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      z-index: 10;
+    }
+    .app {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 18px;
+      background: var(--dark);
+      color: #edf3ff;
+      overflow-y: auto;
+    }
+    .brand {
+      padding-bottom: 20px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .brand strong { display: block; font-size: 18px; }
+    .brand span { display: block; color: #aeb9c9; font-size: 12px; margin-top: 4px; }
+    .nav { display: grid; gap: 5px; }
+    .nav a {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 11px;
+      border-radius: var(--radius);
+      color: #c7d1e2;
+      font-size: 14px;
+    }
+    .nav a:hover,
+    .nav a.active { background: rgba(255,255,255,.10); color: #fff; }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: .75;
+    }
+    main { min-width: 0; }
+    section { padding: 72px clamp(20px, 5vw, 76px); }
+    .section-inner { max-width: 1180px; margin: 0 auto; }
+    .hero {
+      min-height: 82vh;
+      display: grid;
+      align-items: center;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(17,24,39,.95), rgba(17,24,39,.72)),
+        linear-gradient(135deg, #132238, #22455f 56%, #17483e);
+    }
+    .eyebrow {
+      color: #93e7d0;
+      text-transform: uppercase;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: .08em;
+      margin-bottom: 14px;
+    }
+    h1, h2, h3 { margin: 0; line-height: 1.05; letter-spacing: 0; }
+    h1 { font-size: clamp(42px, 7vw, 88px); max-width: 880px; }
+    h2 { font-size: clamp(30px, 4vw, 52px); }
+    h3 { font-size: 20px; }
+    .lead {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 780px;
+      margin-top: 12px;
+    }
+    .hero .lead { color: #d8e2ef; font-size: clamp(17px, 2vw, 21px); }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 10px 24px rgba(20, 32, 51, .06);
+    }
+    .card p { color: var(--muted); margin: 8px 0 0; }
+    .dark-band { background: var(--dark); color: #fff; }
+    .dark-band .lead { color: #c8d3e4; }
+    .timeline {
+      display: grid;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      gap: 14px;
+      align-items: start;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .step b {
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .step span { color: var(--muted); }
+    .accordion { display: grid; gap: 10px; margin-top: 24px; }
+    .accordion-item {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .accordion-button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      padding: 16px;
+      font-weight: 900;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+    }
+    .accordion-content {
+      display: none;
+      padding: 0 16px 16px;
+      color: var(--muted);
+    }
+    .accordion-item.open .accordion-content { display: block; }
+    @media (max-width: 900px) {
+      .app { display: block; }
+      .sidebar { position: static; height: auto; }
+      .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 { grid-template-columns: 1fr; }
+      section { padding: 52px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <strong>{{TITLE}}</strong>
+        <span>{{SUBTITLE}}</span>
+      </div>
+      <nav class="nav" aria-label="Navegação da apresentação">
+        <a href="#inicio" class="active"><span class="dot"></span> Início</a>
+        <a href="#resumo"><span class="dot"></span> Resumo</a>
+        <a href="#plano"><span class="dot"></span> Plano</a>
+        <a href="#proximos"><span class="dot"></span> Próximos passos</a>
+      </nav>
+    </aside>
+    <main>
+      <section class="hero" id="inicio">
+        <div class="section-inner">
+          <div class="eyebrow">{{EYEBROW}}</div>
+          <h1>{{TITLE}}</h1>
+          <p class="lead">{{INTRO}}</p>
+        </div>
+      </section>
+      <section id="resumo">
+        <div class="section-inner">
+          <h2>{{SUMMARY_HEADING}}</h2>
+          <p class="lead">{{SUMMARY_LEAD}}</p>
+          <div class="grid-3">
+            <article class="card"><h3>{{CARD_1_TITLE}}</h3><p>{{CARD_1_TEXT}}</p></article>
+            <article class="card"><h3>{{CARD_2_TITLE}}</h3><p>{{CARD_2_TEXT}}</p></article>
+            <article class="card"><h3>{{CARD_3_TITLE}}</h3><p>{{CARD_3_TEXT}}</p></article>
+          </div>
+        </div>
+      </section>
+      <section class="dark-band" id="plano">
+        <div class="section-inner">
+          <h2>{{PLAN_HEADING}}</h2>
+          <p class="lead">{{PLAN_LEAD}}</p>
+          <div class="timeline">
+            <div class="step"><b>01</b><span>{{STEP_1}}</span></div>
+            <div class="step"><b>02</b><span>{{STEP_2}}</span></div>
+            <div class="step"><b>03</b><span>{{STEP_3}}</span></div>
+          </div>
+        </div>
+      </section>
+      <section id="proximos">
+        <div class="section-inner">
+          <h2>{{NEXT_HEADING}}</h2>
+          <p class="lead">{{NEXT_LEAD}}</p>
+          <div class="accordion">
+            <article class="accordion-item open">
+              <button class="accordion-button" aria-expanded="true">Decisão principal <span>+</span></button>
+              <div class="accordion-content">{{DECISION_DETAIL}}</div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const progress = document.getElementById('progress');
+    const navLinks = Array.from(document.querySelectorAll('.nav a'));
+    const sections = navLinks.map((link) => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+
+    function updateProgress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+    }
+
+    function updateActiveNav() {
+      const current = sections.reduce((active, section) => {
+        return section.getBoundingClientRect().top <= 140 ? section : active;
+      }, sections[0]);
+      navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${current.id}`));
+    }
+
+    document.querySelectorAll('.accordion-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const item = button.closest('.accordion-item');
+        const open = item.classList.toggle('open');
+        button.setAttribute('aria-expanded', String(open));
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      updateProgress();
+      updateActiveNav();
+    }, { passive: true });
+    updateProgress();
+    updateActiveNav();
+  </script>
+</body>
+</html>
