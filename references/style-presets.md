@@ -8,6 +8,8 @@ Which visual style should I use: executive briefing, editorial report, technical
 
 If the user does not choose, select the preset that best matches the audience and source material.
 
+Presets describe visual tone. Templates describe page structure and interactions. Read `references/template-selection.md` when deciding whether to start from the general, executive briefing, technical command center, interactive planner, or document dossier template.
+
 ## Executive Briefing
 
 Use for leadership, board, sponsor, investor, or public-sector decision presentations.

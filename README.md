@@ -10,9 +10,35 @@ It guides the agent through a repeatable workflow: understand the source materia
 
 The output is designed to replace a slide deck or become a shareable internal page. Presentations can include navigation, progress indicators, cards, metrics, tables, timelines, tabs, accordions, decision sections, and branded visuals when assets are available.
 
-![Civic Mobility Briefing preview](assets/previews/civic-mobility-briefing.png)
+**General presentation**
 
-![Community Platform Guide preview](assets/previews/community-platform-guide.png)
+![Artemis Program Overview preview](assets/previews/artemis-program-overview.png)
+
+[Open HTML example](examples/artemis-program-overview.html)
+
+**Executive briefing**
+
+![Artemis II Executive Briefing preview](assets/previews/artemis-ii-executive-briefing.png)
+
+[Open HTML example](examples/artemis-ii-executive-briefing.html)
+
+**Technical command center**
+
+![Kubernetes Command Center preview](assets/previews/kubernetes-command-center.png)
+
+[Open HTML example](examples/kubernetes-command-center.html)
+
+**Interactive planner**
+
+![Artemis II Mission Planner preview](assets/previews/artemis-ii-mission-planner.png)
+
+[Open HTML example](examples/artemis-ii-mission-planner.html)
+
+**Document dossier**
+
+![WHO Ambient Air Pollution Dossier preview](assets/previews/who-air-pollution-dossier.png)
+
+[Open HTML example](examples/who-air-pollution-dossier.html)
 
 After installing, ask your agent:
 

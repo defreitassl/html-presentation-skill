@@ -12,7 +12,7 @@ Build a standalone HTML presentation from source material.
 1. Inspect the source content and identify audience, purpose, key decisions, constraints, risks, and level of detail.
 2. Identify the desired visual direction, brand assets, color constraints, and preferred style preset.
 3. Build a narrative matrix before writing HTML: sections, section purpose, key message, evidence/details, and best visual pattern.
-4. Choose section patterns that match the content: hero, executive summary, roadmap, comparison, process flow, metrics, table, FAQ, dashboard, embedded document, or decision checklist.
+4. Choose a template and section patterns that match the content: hero, executive summary, roadmap, comparison, process flow, metrics, table, FAQ, dashboard, embedded document, or decision checklist.
 5. Design a visual system with CSS variables, layout rhythm, typography scale, component rules, and responsive behavior.
 6. Generate one browser-ready `.html` file with embedded CSS and JavaScript unless the user requests a framework.
 7. Add useful interaction only where it improves scanning, comparison, exploration, or comprehension.
@@ -20,6 +20,8 @@ Build a standalone HTML presentation from source material.
 
 Read `references/workflow.md` for the full execution sequence.
 Read `references/agent-decisions.md` when the user leaves filename, language, style, validation depth, or asset handling unspecified.
+Read `references/template-selection.md` before choosing or adapting a bundled HTML template.
+Read `references/component-library.md` when the chosen template needs optional sections or richer interactions supported by the source.
 
 ## Minimum Acceptance Criteria
 
@@ -51,7 +53,7 @@ Create an artifact that can replace a slide deck:
 - No placeholder copy, lorem ipsum, unused controls, broken anchors, generic decorative filler, unsupported claims, or fake data presented as real.
 - No repeated content, redundant sections, oversized text blocks, or low-value details that make the presentation harder to scan.
 
-Use `assets/templates/standalone-presentation.html` as a starting point when creating a new file from scratch.
+Use the bundled templates in `assets/templates/` as starting points when creating a new file from scratch. Choose the template from the source content, or ask the user to choose when the task allows a quick clarification.
 
 ## Style And Brand Intake
 
@@ -77,6 +79,7 @@ python3 scripts/inspect_brand_assets.py . --scan-workspace
 If no useful assets or colors are found, ask whether the user has a logo, screenshot, product image, brand guide, or reference image to use. Continue with an appropriate preset if they do not.
 
 Read `references/style-presets.md` for preset selection.
+Read `references/template-selection.md` for template selection.
 Read `references/brand-assets.md` for brand asset handling.
 
 ## Quality Bar
@@ -118,6 +121,7 @@ Favor purposeful presentation patterns:
 Read `references/visual-patterns.md` before designing the visual system.
 Read `references/interaction-patterns.md` before adding JavaScript interactions.
 Read `references/presentation-pattern-library.md` when choosing reusable section layouts for a realistic presentation.
+Read `references/component-library.md` when adding optional components such as calendars, scenario matrices, validation boards, margin notes, filters, or appendices.
 
 ## Validation
 

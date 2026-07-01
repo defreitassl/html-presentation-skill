@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --surface: #fffdf7;
+      --ink: #172033;
+      --muted: #5b6470;
+      --line: #d8d0c3;
+      --primary: #146c94;
+      --accent: #c56b2c;
+      --success: #18735d;
+      --warning: #b7791f;
+      --danger: #b0443e;
+      --nav: #111923;
+      --radius: 8px;
+      --shadow: 0 18px 44px rgba(23, 32, 51, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.5; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    a:focus-visible, button:focus-visible { outline: 3px solid rgba(20,108,148,.75); outline-offset: 3px; }
+    .progress { position: fixed; inset: 0 0 auto; height: 4px; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, var(--primary), var(--accent), var(--success)); z-index: 20; }
+    .app { display: grid; grid-template-columns: 292px minmax(0, 1fr); min-height: 100vh; }
+    aside { position: sticky; top: 0; height: 100vh; padding: 24px 18px; overflow-y: auto; background: var(--nav); color: #eef5fb; }
+    .brand { padding-bottom: 20px; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.14); }
+    .brand-mark { width: 46px; height: 46px; margin-bottom: 12px; border-radius: 14px; background: linear-gradient(135deg, var(--primary) 0 48%, var(--accent) 48% 72%, var(--success) 72%); }
+    .brand strong { display: block; font-size: 19px; line-height: 1.1; }
+    .brand span { display: block; margin-top: 5px; color: #aeb9c7; font-size: 12px; }
+    nav { display: grid; gap: 5px; }
+    nav a { display: flex; gap: 10px; align-items: center; min-height: 40px; padding: 10px 11px; border-radius: var(--radius); color: #c9d4e2; font-size: 14px; }
+    nav a:hover, nav a.active { background: rgba(255,255,255,.1); color: #fff; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    main { min-width: 0; }
+    section { padding: 68px clamp(20px, 5vw, 76px); }
+    .inner { max-width: 1180px; margin: 0 auto; }
+    .hero { min-height: 82vh; display: grid; align-items: center; color: #fff; background: linear-gradient(90deg, rgba(17,25,35,.96), rgba(17,25,35,.72)), linear-gradient(135deg, #16283b, #225069 58%, #3d5338); }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .86fr); gap: 46px; align-items: center; }
+    .eyebrow { color: #9be4ce; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0; margin-bottom: 14px; }
+    h1, h2, h3 { margin: 0; line-height: 1.05; letter-spacing: 0; }
+    h1 { font-family: Georgia, serif; font-size: 72px; max-width: 820px; }
+    h2 { font-family: Georgia, serif; font-size: 44px; }
+    h3 { font-size: 20px; }
+    p { margin: 0; }
+    .lead { margin-top: 14px; color: var(--muted); font-size: 17px; max-width: 760px; }
+    .hero .lead { color: #dbe6f2; font-size: 20px; }
+    .decision-card { padding: 22px; border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius); background: rgba(255,255,255,.08); box-shadow: 0 22px 60px rgba(0,0,0,.22); }
+    .decision-card b { display: block; color: #9be4ce; margin-bottom: 8px; }
+    .decision-card strong { display: block; color: #fff; font-size: 30px; line-height: 1.1; }
+    .decision-card p { margin-top: 12px; color: #dbe6f2; }
+    .kpis, .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: 0 10px 24px rgba(23,32,51,.06); }
+    .metric { display: block; color: var(--primary); font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 10px; }
+    .card p { margin-top: 8px; color: var(--muted); }
+    .roadmap { display: grid; gap: 12px; margin-top: 28px; }
+    .phase { display: grid; grid-template-columns: 82px 1fr 160px; gap: 16px; align-items: start; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    .phase b { color: var(--accent); }
+    .badge { justify-self: start; border-radius: 999px; padding: 5px 10px; color: #fff; background: var(--success); font-size: 12px; font-weight: 900; }
+    .badge.warn { background: var(--warning); }
+    .scenario-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 28px; }
+    .scenario { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 18px; }
+    .scenario b { display: inline-flex; border-radius: 999px; padding: 4px 9px; color: #fff; background: var(--primary); font-family: "Segoe UI", system-ui, sans-serif; font-size: 12px; margin-bottom: 12px; }
+    .scenario:nth-child(2) b { background: var(--accent); }
+    .scenario:nth-child(3) b { background: var(--danger); }
+    .accordion { display: grid; gap: 10px; margin-top: 24px; }
+    .accordion-item { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
+    .accordion-button { width: 100%; min-height: 56px; display: flex; justify-content: space-between; gap: 16px; padding: 16px; border: 0; background: transparent; color: var(--ink); text-align: left; font-weight: 900; }
+    .accordion-content { display: none; padding: 0 16px 16px; color: var(--muted); }
+    .accordion-item.open .accordion-content { display: block; }
+    .table-wrap { overflow-x: auto; margin-top: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    table { width: 100%; min-width: 760px; border-collapse: collapse; }
+    th, td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #eee8dc; text-transform: uppercase; letter-spacing: 0; font-size: 12px; }
+    @media (max-width: 960px) { .app { display: block; } aside { position: static; height: auto; } .hero-grid, .kpis, .grid-3, .scenario-grid { grid-template-columns: 1fr; } h1 { font-size: 44px; } h2 { font-size: 32px; } .phase { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .001ms !important; animation-duration: .001ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <div class="app">
+    <aside>
+      <div class="brand"><div class="brand-mark" aria-hidden="true"></div><strong>{{TITLE}}</strong><span>{{SUBTITLE}}</span></div>
+      <nav aria-label="Presentation navigation">
+        <a class="active" href="#overview"><span class="dot"></span> Overview</a>
+        <a href="#recommendation"><span class="dot"></span> Recommendation</a>
+        <a href="#roadmap"><span class="dot"></span> Roadmap</a>
+        <a href="#scenarios"><span class="dot"></span> Scenarios</a>
+        <a href="#risks"><span class="dot"></span> Risks</a>
+        <a href="#decision"><span class="dot"></span> Decision</a>
+      </nav>
+    </aside>
+    <main>
+      <section class="hero" id="overview"><div class="inner hero-grid"><div><div class="eyebrow">{{EYEBROW}}</div><h1>{{TITLE}}</h1><p class="lead">{{INTRO}}</p></div><div class="decision-card"><b>{{DECISION_LABEL}}</b><strong>{{PRIMARY_DECISION}}</strong><p>{{DECISION_CONTEXT}}</p></div></div></section>
+      <section id="recommendation"><div class="inner"><h2>{{RECOMMENDATION_HEADING}}</h2><p class="lead">{{RECOMMENDATION_LEAD}}</p><div class="kpis"><article class="card"><span class="metric">{{KPI_1}}</span><h3>{{KPI_1_LABEL}}</h3><p>{{KPI_1_TEXT}}</p></article><article class="card"><span class="metric">{{KPI_2}}</span><h3>{{KPI_2_LABEL}}</h3><p>{{KPI_2_TEXT}}</p></article><article class="card"><span class="metric">{{KPI_3}}</span><h3>{{KPI_3_LABEL}}</h3><p>{{KPI_3_TEXT}}</p></article></div></div></section>
+      <section id="roadmap"><div class="inner"><h2>{{ROADMAP_HEADING}}</h2><p class="lead">{{ROADMAP_LEAD}}</p><div class="roadmap"><article class="phase"><b>{{PHASE_1}}</b><div><h3>{{PHASE_1_TITLE}}</h3><p>{{PHASE_1_TEXT}}</p></div><span class="badge">{{PHASE_1_STATUS}}</span></article><article class="phase"><b>{{PHASE_2}}</b><div><h3>{{PHASE_2_TITLE}}</h3><p>{{PHASE_2_TEXT}}</p></div><span class="badge warn">{{PHASE_2_STATUS}}</span></article><article class="phase"><b>{{PHASE_3}}</b><div><h3>{{PHASE_3_TITLE}}</h3><p>{{PHASE_3_TEXT}}</p></div><span class="badge">{{PHASE_3_STATUS}}</span></article></div></div></section>
+      <section id="scenarios"><div class="inner"><h2>{{SCENARIO_HEADING}}</h2><p class="lead">{{SCENARIO_LEAD}}</p><div class="scenario-grid"><article class="scenario"><b>{{SCENARIO_1_LABEL}}</b><h3>{{SCENARIO_1_TITLE}}</h3><p>{{SCENARIO_1_TEXT}}</p></article><article class="scenario"><b>{{SCENARIO_2_LABEL}}</b><h3>{{SCENARIO_2_TITLE}}</h3><p>{{SCENARIO_2_TEXT}}</p></article><article class="scenario"><b>{{SCENARIO_3_LABEL}}</b><h3>{{SCENARIO_3_TITLE}}</h3><p>{{SCENARIO_3_TEXT}}</p></article></div></div></section>
+      <section id="risks"><div class="inner"><h2>{{RISK_HEADING}}</h2><p class="lead">{{RISK_LEAD}}</p><div class="accordion"><article class="accordion-item open"><button class="accordion-button" type="button" aria-expanded="true" aria-controls="risk-one">{{RISK_1_TITLE}} <span aria-hidden="true">+</span></button><div class="accordion-content" id="risk-one">{{RISK_1_DETAIL}}</div></article><article class="accordion-item"><button class="accordion-button" type="button" aria-expanded="false" aria-controls="risk-two">{{RISK_2_TITLE}} <span aria-hidden="true">+</span></button><div class="accordion-content" id="risk-two">{{RISK_2_DETAIL}}</div></article></div></div></section>
+      <section id="decision"><div class="inner"><h2>{{DECISION_REGISTER_HEADING}}</h2><p class="lead">{{DECISION_REGISTER_LEAD}}</p><div class="table-wrap"><table><thead><tr><th>{{TABLE_COL_1}}</th><th>{{TABLE_COL_2}}</th><th>{{TABLE_COL_3}}</th></tr></thead><tbody><tr><td>{{DECISION_ROW_1}}</td><td>{{OWNER_ROW_1}}</td><td>{{NEXT_ROW_1}}</td></tr><tr><td>{{DECISION_ROW_2}}</td><td>{{OWNER_ROW_2}}</td><td>{{NEXT_ROW_2}}</td></tr></tbody></table></div></div></section>
+    </main>
+  </div>
+  <script>
+    const progress = document.getElementById('progress');
+    const links = Array.from(document.querySelectorAll('nav a'));
+    const sections = links.map((link) => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    function updateProgress() { const max = document.documentElement.scrollHeight - innerHeight; progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`; }
+    function updateNav() { const current = sections.reduce((active, section) => section.getBoundingClientRect().top <= 140 ? section : active, sections[0]); links.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${current.id}`)); }
+    document.querySelectorAll('.accordion-button').forEach((button) => button.addEventListener('click', () => { const item = button.closest('.accordion-item'); const open = item.classList.toggle('open'); button.setAttribute('aria-expanded', String(open)); }));
+    addEventListener('scroll', () => { updateProgress(); updateNav(); }, { passive: true });
+    updateProgress(); updateNav();
+  </script>
+</body>
+</html>

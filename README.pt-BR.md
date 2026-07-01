@@ -10,9 +10,35 @@ Ela guia o agente por um fluxo repetível: entender o material de origem, organi
 
 O resultado pode substituir uma apresentação de slides ou virar uma página interna compartilhável. As apresentações podem incluir navegação, barra de progresso, cards, métricas, tabelas, timelines, abas, acordeões, seções de decisão e identidade visual quando houver assets disponíveis.
 
-![Preview do Civic Mobility Briefing](assets/previews/civic-mobility-briefing.png)
+**Apresentação geral**
 
-![Preview do Community Platform Guide](assets/previews/community-platform-guide.png)
+![Preview do Artemis Program Overview](assets/previews/artemis-program-overview.png)
+
+[Abrir exemplo HTML](examples/artemis-program-overview.html)
+
+**Briefing executivo**
+
+![Preview do Artemis II Executive Briefing](assets/previews/artemis-ii-executive-briefing.png)
+
+[Abrir exemplo HTML](examples/artemis-ii-executive-briefing.html)
+
+**Command center técnico**
+
+![Preview do Kubernetes Command Center](assets/previews/kubernetes-command-center.png)
+
+[Abrir exemplo HTML](examples/kubernetes-command-center.html)
+
+**Planner interativo**
+
+![Preview do Artemis II Mission Planner](assets/previews/artemis-ii-mission-planner.png)
+
+[Abrir exemplo HTML](examples/artemis-ii-mission-planner.html)
+
+**Dossiê documental**
+
+![Preview do WHO Ambient Air Pollution Dossier](assets/previews/who-air-pollution-dossier.png)
+
+[Abrir exemplo HTML](examples/who-air-pollution-dossier.html)
 
 Depois de instalar, peça ao seu agente:
 

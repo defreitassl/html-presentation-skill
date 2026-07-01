@@ -3,7 +3,7 @@
 ## Fast Execution Checklist
 
 1. Read the source and identify audience, goal, language, constraints, and output path.
-2. Decide style preset and brand handling; scan assets when useful.
+2. Decide style preset, template, and brand handling; scan assets when useful.
 3. Build a compact internal narrative matrix before writing HTML.
 4. Select section patterns that match the content.
 5. Generate one standalone HTML file with embedded CSS and JavaScript.
@@ -21,12 +21,14 @@ Identify:
 - Required output path and filename.
 - Brand constraints, assets, colors, logos, and language.
 - Preferred style preset or visual direction.
+- Preferred template, if the user names one.
 
 If the user gives no filename, choose a descriptive kebab-case name.
 
 If the user does not specify style, ask one concise question with preset options. If the user wants fast execution or gives no answer, choose a preset based on the audience and content.
 
 Use `references/agent-decisions.md` for default choices when the user leaves details unspecified.
+Use `references/template-selection.md` to ask for a template or choose one automatically from the source.
 
 For brand identity, prefer this order:
 
@@ -83,6 +85,13 @@ Default to a single `.html` file with:
 - Accessible button semantics for tabs, accordions, filters, and toggles.
 - CSS variables derived from either the selected preset or detected brand assets.
 - Relative asset paths for logos, icons, photos, and fonts.
+
+Start from the closest bundled template in `assets/templates/`, then adapt it aggressively:
+
+- Remove sections that do not fit the source.
+- Keep only interactions that help the reader compare, navigate, filter, plan, or inspect details.
+- Do not preserve template placeholders, example dates, fake metrics, or unused controls.
+- Use `references/component-library.md` when the source supports optional components such as scenario matrices, calendars, validation boards, margin notes, filters, evidence callouts, or appendices.
 
 ## 5. Review Loop
 

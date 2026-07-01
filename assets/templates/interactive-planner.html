@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      --bg: #f6f7f2;
+      --surface: #ffffff;
+      --surface-2: #eaf1ee;
+      --ink: #15211f;
+      --muted: #5b6a66;
+      --line: #d2ded9;
+      --primary: #087f8c;
+      --accent: #b77718;
+      --success: #6a9f28;
+      --warning: #c56b2c;
+      --danger: #b24a54;
+      --radius: 8px;
+      --shadow: 0 16px 40px rgba(21, 33, 31, .11);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--bg); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.5; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    a:focus-visible, button:focus-visible { outline: 3px solid rgba(8,127,140,.75); outline-offset: 3px; }
+    .progress { position: fixed; inset: 0 0 auto; height: 4px; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, var(--primary), var(--success), var(--accent)); z-index: 20; }
+    nav { position: sticky; top: 0; z-index: 10; display: flex; gap: 8px; flex-wrap: wrap; padding: 12px clamp(20px, 5vw, 76px); background: rgba(246,247,242,.92); border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); }
+    nav a { min-height: 36px; display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; color: var(--muted); background: var(--surface); }
+    nav a.active, nav a:hover { color: var(--ink); border-color: var(--primary); }
+    header, section { padding: 64px clamp(20px, 5vw, 76px); }
+    .inner { max-width: 1180px; margin: 0 auto; }
+    .hero { min-height: 76vh; display: grid; align-items: center; background: linear-gradient(135deg, #10242a, #1f4f58 55%, #35572c); color: #fff; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(340px, 1.05fr); gap: 38px; align-items: center; }
+    .eyebrow { color: #b8f3dd; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0; margin-bottom: 14px; }
+    h1, h2, h3 { margin: 0; line-height: 1.05; letter-spacing: 0; }
+    h1 { font-size: 68px; max-width: 840px; }
+    h2 { font-size: 42px; }
+    h3 { font-size: 20px; }
+    p { margin: 0; }
+    .lead { margin-top: 12px; color: var(--muted); font-size: 17px; max-width: 780px; }
+    .hero .lead { color: #dceae7; font-size: 20px; }
+    .calendar { border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius); background: rgba(255,255,255,.08); box-shadow: 0 22px 60px rgba(0,0,0,.22); overflow: hidden; }
+    .calendar-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 14px; background: rgba(0,0,0,.18); }
+    .calendar-controls { display: flex; gap: 8px; }
+    .calendar-controls button { border: 1px solid rgba(255,255,255,.24); border-radius: var(--radius); background: rgba(255,255,255,.08); color: #fff; min-width: 38px; min-height: 34px; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: rgba(255,255,255,.12); }
+    .day { min-height: 76px; padding: 8px; background: rgba(11,19,22,.72); color: #dceae7; font-size: 13px; }
+    .day b { display: block; color: #fff; margin-bottom: 6px; }
+    .event { display: block; border-radius: 6px; padding: 3px 5px; background: var(--primary); color: #fff; font-size: 11px; font-weight: 800; }
+    .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+    .filter { border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); padding: 8px 12px; }
+    .filter[aria-pressed="true"] { color: #fff; border-color: var(--primary); background: var(--primary); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: 0 10px 24px rgba(21,33,31,.06); }
+    .card p { margin-top: 8px; color: var(--muted); }
+    .roadmap { display: grid; gap: 12px; margin-top: 28px; }
+    .milestone { display: grid; grid-template-columns: 90px 1fr 140px; gap: 16px; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    .milestone b { color: var(--accent); }
+    .badge { justify-self: start; border-radius: 999px; padding: 5px 10px; color: #fff; background: var(--success); font-size: 12px; font-weight: 900; }
+    .capacity-board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 28px; }
+    .capacity { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 16px; }
+    .capacity meter { width: 100%; height: 12px; margin-top: 12px; accent-color: var(--primary); }
+    .table-wrap { overflow-x: auto; margin-top: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    table { width: 100%; min-width: 760px; border-collapse: collapse; }
+    th, td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: var(--surface-2); color: var(--ink); text-transform: uppercase; letter-spacing: 0; font-size: 12px; }
+    .checklist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 28px; }
+    .check { display: flex; gap: 10px; align-items: flex-start; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    .check input { margin-top: 4px; accent-color: var(--primary); }
+    @media (max-width: 960px) { .hero-grid, .grid-3, .checklist, .capacity-board { grid-template-columns: 1fr; } h1 { font-size: 42px; } h2 { font-size: 30px; } .milestone { grid-template-columns: 1fr; } .calendar-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .001ms !important; animation-duration: .001ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <nav aria-label="Presentation navigation"><a class="active" href="#overview">Overview</a><a href="#calendar">Calendar</a><a href="#workstreams">Workstreams</a><a href="#roadmap">Roadmap</a><a href="#capacity">Capacity</a><a href="#owners">Owners</a><a href="#launch">Launch</a></nav>
+  <header class="hero" id="overview"><div class="inner hero-grid"><div><div class="eyebrow">{{EYEBROW}}</div><h1>{{TITLE}}</h1><p class="lead">{{INTRO}}</p></div><div class="calendar" aria-label="Calendar preview"><div class="calendar-head"><strong id="calendar-title">{{CALENDAR_TITLE}}</strong><div class="calendar-controls"><button type="button" aria-controls="calendar-title" data-month="{{PREV_MONTH}}">‹</button><button type="button" aria-controls="calendar-title" data-month="{{NEXT_MONTH}}">›</button></div></div><div class="calendar-grid"><div class="day"><b>01</b>{{DAY_1}}</div><div class="day"><b>02</b>{{DAY_2}}</div><div class="day"><b>03</b><span class="event">{{EVENT_1}}</span></div><div class="day"><b>04</b>{{DAY_4}}</div><div class="day"><b>05</b><span class="event">{{EVENT_2}}</span></div><div class="day"><b>06</b>{{DAY_6}}</div><div class="day"><b>07</b>{{DAY_7}}</div></div></div></div></header>
+  <main>
+    <section id="calendar"><div class="inner"><h2>{{CALENDAR_HEADING}}</h2><p class="lead">{{CALENDAR_LEAD}}</p><div class="grid-3"><article class="card"><h3>{{EVENT_CARD_1}}</h3><p>{{EVENT_CARD_1_TEXT}}</p></article><article class="card"><h3>{{EVENT_CARD_2}}</h3><p>{{EVENT_CARD_2_TEXT}}</p></article><article class="card"><h3>{{EVENT_CARD_3}}</h3><p>{{EVENT_CARD_3_TEXT}}</p></article></div></div></section>
+    <section id="workstreams"><div class="inner"><h2>{{WORKSTREAM_HEADING}}</h2><p class="lead">{{WORKSTREAM_LEAD}}</p><div class="filter-row" aria-label="Workstream filters"><button class="filter" type="button" aria-pressed="true" data-filter="all">All</button><button class="filter" type="button" aria-pressed="false" data-filter="product">{{FILTER_1}}</button><button class="filter" type="button" aria-pressed="false" data-filter="ops">{{FILTER_2}}</button><button class="filter" type="button" aria-pressed="false" data-filter="comms">{{FILTER_3}}</button></div><div class="grid-3"><article class="card" data-track="product"><h3>{{WORKSTREAM_1}}</h3><p>{{WORKSTREAM_1_TEXT}}</p></article><article class="card" data-track="ops"><h3>{{WORKSTREAM_2}}</h3><p>{{WORKSTREAM_2_TEXT}}</p></article><article class="card" data-track="comms"><h3>{{WORKSTREAM_3}}</h3><p>{{WORKSTREAM_3_TEXT}}</p></article></div></div></section>
+    <section id="roadmap"><div class="inner"><h2>{{ROADMAP_HEADING}}</h2><p class="lead">{{ROADMAP_LEAD}}</p><div class="roadmap"><article class="milestone"><b>{{MILESTONE_1}}</b><div><h3>{{MILESTONE_1_TITLE}}</h3><p>{{MILESTONE_1_TEXT}}</p></div><span class="badge">{{MILESTONE_1_STATUS}}</span></article><article class="milestone"><b>{{MILESTONE_2}}</b><div><h3>{{MILESTONE_2_TITLE}}</h3><p>{{MILESTONE_2_TEXT}}</p></div><span class="badge">{{MILESTONE_2_STATUS}}</span></article></div></div></section>
+    <section id="capacity"><div class="inner"><h2>{{CAPACITY_HEADING}}</h2><p class="lead">{{CAPACITY_LEAD}}</p><div class="capacity-board"><article class="capacity"><h3>{{CAPACITY_1_LABEL}}</h3><p>{{CAPACITY_1_TEXT}}</p><meter min="0" max="100" value="72">72%</meter></article><article class="capacity"><h3>{{CAPACITY_2_LABEL}}</h3><p>{{CAPACITY_2_TEXT}}</p><meter min="0" max="100" value="48">48%</meter></article><article class="capacity"><h3>{{CAPACITY_3_LABEL}}</h3><p>{{CAPACITY_3_TEXT}}</p><meter min="0" max="100" value="86">86%</meter></article><article class="capacity"><h3>{{CAPACITY_4_LABEL}}</h3><p>{{CAPACITY_4_TEXT}}</p><meter min="0" max="100" value="60">60%</meter></article></div></div></section>
+    <section id="owners"><div class="inner"><h2>{{OWNER_HEADING}}</h2><p class="lead">{{OWNER_LEAD}}</p><div class="table-wrap"><table><thead><tr><th>{{OWNER_COL_1}}</th><th>{{OWNER_COL_2}}</th><th>{{OWNER_COL_3}}</th></tr></thead><tbody><tr><td>{{OWNER_ROW_1}}</td><td>{{ROLE_ROW_1}}</td><td>{{NEXT_ROW_1}}</td></tr><tr><td>{{OWNER_ROW_2}}</td><td>{{ROLE_ROW_2}}</td><td>{{NEXT_ROW_2}}</td></tr></tbody></table></div></div></section>
+    <section id="launch"><div class="inner"><h2>{{LAUNCH_HEADING}}</h2><p class="lead">{{LAUNCH_LEAD}}</p><div class="checklist"><label class="check"><input type="checkbox"> <span>{{CHECK_1}}</span></label><label class="check"><input type="checkbox"> <span>{{CHECK_2}}</span></label><label class="check"><input type="checkbox"> <span>{{CHECK_3}}</span></label><label class="check"><input type="checkbox"> <span>{{CHECK_4}}</span></label></div></div></section>
+  </main>
+  <script>
+    const progress = document.getElementById('progress');
+    const links = Array.from(document.querySelectorAll('nav a'));
+    const sections = links.map((link) => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    function updateProgress() { const max = document.documentElement.scrollHeight - innerHeight; progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`; }
+    function updateNav() { const current = sections.reduce((active, section) => section.getBoundingClientRect().top <= 120 ? section : active, sections[0]); links.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${current.id}`)); }
+    document.querySelectorAll('[data-month]').forEach((button) => button.addEventListener('click', () => { document.getElementById('calendar-title').textContent = button.dataset.month; }));
+    document.querySelectorAll('[data-filter]').forEach((button) => button.addEventListener('click', () => { const filter = button.dataset.filter; document.querySelectorAll('[data-filter]').forEach((item) => item.setAttribute('aria-pressed', String(item === button))); document.querySelectorAll('[data-track]').forEach((card) => { card.hidden = filter !== 'all' && card.dataset.track !== filter; }); }));
+    addEventListener('scroll', () => { updateProgress(); updateNav(); }, { passive: true });
+    updateProgress(); updateNav();
+  </script>
+</body>
+</html>

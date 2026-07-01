@@ -7,12 +7,21 @@ Use this reference when the user leaves implementation details unspecified. Make
 - Filename: choose a descriptive kebab-case `.html` name from the subject, such as `program-briefing.html`.
 - Language: match the source language. If the source mixes languages, use the language of the user's request.
 - Style: choose the preset that fits audience and material when the user wants speed or does not answer.
+- Template: choose the bundled template that fits the source, or use `standalone-presentation.html` when no dominant structure is clear.
 - Output: create one standalone HTML file with embedded CSS and JavaScript.
 - Navigation: add sidebar or top navigation when the presentation has 5 or more sections.
 - Brand: scan the workspace for likely brand assets unless the user provides an explicit asset path.
 - Assets: reference local assets with relative paths; do not embed large raster images as base64.
 - Data: preserve provided facts, numbers, owners, dates, caveats, and pending decisions. Do not invent missing values.
 - Validation: run the validator in normal mode for drafts and `--strict` for examples, public artifacts, or release-ready deliverables.
+
+## Template Selection
+
+- Decision, leadership, risk, recommendation, sponsor, or budget material: use `executive-briefing.html`.
+- Architecture, systems, security, platform, incident, runbook, or implementation material: use `technical-command-center.html`.
+- Dates, events, launch plans, cohorts, campaigns, calendars, releases, or owner/workstream coordination: use `interactive-planner.html`.
+- Text-heavy, memo-like, legalistic, policy, research, or async executive reading material: use `document-dossier.html`.
+- Mixed or ambiguous material: use `standalone-presentation.html`.
 
 ## Preset Selection
 
