@@ -24,7 +24,14 @@ Use the HTML Presentation Skill to transform this document into a polished inter
 
 Requirements: Git and Python 3.10+.
 
-For most users, install locally inside the project where the coding agent will work. Local install supports Codex, Claude Code, GitHub Copilot, and Antigravity/generic agents.
+There are two install options:
+
+- **Option 1: Local Project Install**: recommended for most users. The skill is installed inside one project and can support Codex, Claude Code, GitHub Copilot, and Antigravity/generic agents.
+- **Option 2: Global Codex Install**: installs the skill into the Codex home folder so Codex can use it across projects.
+
+**Option 1: Local Project Install**
+
+Run this from the project where the coding agent will work.
 
 macOS/Linux:
 
@@ -45,7 +52,7 @@ py "$tmpdir\scripts\install.py" --scope local --agents all --project .
 
 If `py` is not available on Windows, use `python`.
 
-Agent targets:
+Local agent targets:
 
 | Agent | Install value | Files created or updated |
 | --- | --- | --- |
@@ -71,10 +78,29 @@ python3 scripts/install.py --scope local --agents all --project . --dry-run
 python3 scripts/install.py --scope local --agents all --project . --force
 ```
 
-Global install is available for Codex:
+**Option 2: Global Codex Install**
+
+Use this when you want Codex to find the skill from any project. Global install currently targets Codex only.
+
+macOS/Linux:
 
 ```bash
 tmpdir="$(mktemp -d)"
 git clone https://github.com/defreitassl/html-presentation-skill.git "$tmpdir"
 python3 "$tmpdir/scripts/install.py" --scope global --agents codex
+```
+
+Windows PowerShell:
+
+```powershell
+$tmpdir = Join-Path $env:TEMP "html-presentation-skill"
+Remove-Item $tmpdir -Recurse -Force -ErrorAction SilentlyContinue
+git clone https://github.com/defreitassl/html-presentation-skill.git $tmpdir
+py "$tmpdir\scripts\install.py" --scope global --agents codex
+```
+
+Global Codex target:
+
+```text
+${CODEX_HOME:-$HOME/.codex}/skills/html-presentation-skill
 ```

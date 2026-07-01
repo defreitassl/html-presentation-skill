@@ -24,7 +24,14 @@ Use a HTML Presentation Skill para transformar este documento em uma apresentaç
 
 Requisitos: Git e Python 3.10+.
 
-Para a maioria dos casos, instale localmente no projeto onde o agente de código vai trabalhar. A instalação local suporta Codex, Claude Code, GitHub Copilot e Antigravity/agentes genéricos.
+Existem duas opções de instalação:
+
+- **Opção 1: Instalação Local No Projeto**: recomendada para a maioria dos usuários. A skill é instalada dentro de um projeto e pode atender Codex, Claude Code, GitHub Copilot e Antigravity/agentes genéricos.
+- **Opção 2: Instalação Global Para Codex**: instala a skill na pasta global do Codex para uso em vários projetos.
+
+**Opção 1: Instalação Local No Projeto**
+
+Execute a partir do projeto onde o agente de código vai trabalhar.
 
 macOS/Linux:
 
@@ -45,7 +52,7 @@ py "$tmpdir\scripts\install.py" --scope local --agents all --project .
 
 Se `py` não estiver disponível no Windows, use `python`.
 
-Alvos de agente:
+Alvos locais de agente:
 
 | Agente | Valor de instalação | Arquivos criados ou atualizados |
 | --- | --- | --- |
@@ -71,10 +78,29 @@ python3 scripts/install.py --scope local --agents all --project . --dry-run
 python3 scripts/install.py --scope local --agents all --project . --force
 ```
 
-A instalação global está disponível para Codex:
+**Opção 2: Instalação Global Para Codex**
+
+Use quando quiser que o Codex encontre a skill a partir de qualquer projeto. A instalação global atualmente atende apenas Codex.
+
+macOS/Linux:
 
 ```bash
 tmpdir="$(mktemp -d)"
 git clone https://github.com/defreitassl/html-presentation-skill.git "$tmpdir"
 python3 "$tmpdir/scripts/install.py" --scope global --agents codex
+```
+
+Windows PowerShell:
+
+```powershell
+$tmpdir = Join-Path $env:TEMP "html-presentation-skill"
+Remove-Item $tmpdir -Recurse -Force -ErrorAction SilentlyContinue
+git clone https://github.com/defreitassl/html-presentation-skill.git $tmpdir
+py "$tmpdir\scripts\install.py" --scope global --agents codex
+```
+
+Destino global do Codex:
+
+```text
+${CODEX_HOME:-$HOME/.codex}/skills/html-presentation-skill
 ```
