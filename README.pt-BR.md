@@ -24,14 +24,11 @@ Use a HTML Presentation Skill para transformar este documento em uma apresentaç
 
 Requisitos: Git e Python 3.10+.
 
-Existem duas opções de instalação:
+Escolha uma opção:
 
-- **Opção 1: Instalação Local No Projeto**: recomendada para a maioria dos usuários. A skill é instalada dentro de um projeto e pode atender Codex, Claude Code, GitHub Copilot e Antigravity/agentes genéricos.
-- **Opção 2: Instalação Global Para Codex**: instala a skill na pasta global do Codex para uso em vários projetos.
+**Instalação local no projeto**
 
-**Opção 1: Instalação Local No Projeto**
-
-Execute a partir do projeto onde o agente de código vai trabalhar.
+Use quando quiser que a skill fique disponível apenas no projeto atual. Esta é a melhor opção para Claude Code, GitHub Copilot, Antigravity/agentes genéricos e uso do Codex específico do projeto.
 
 macOS/Linux:
 
@@ -52,33 +49,7 @@ py "$tmpdir\scripts\install.py" --scope local --agents all --project .
 
 Se `py` não estiver disponível no Windows, use `python`.
 
-Alvos locais de agente:
-
-| Agente | Valor de instalação | Arquivos criados ou atualizados |
-| --- | --- | --- |
-| Codex | `codex` | `.codex/skills/html-presentation-skill` |
-| Claude Code | `claude` | `.codex/skills/html-presentation-skill`, `CLAUDE.md` |
-| GitHub Copilot | `copilot` | `.codex/skills/html-presentation-skill`, `.github/copilot-instructions.md` |
-| Antigravity / agentes genéricos | `antigravity` | `.codex/skills/html-presentation-skill`, `AGENTS.md` |
-| Todos os agentes suportados | `all` | Todos os arquivos acima |
-
-Para instalar para apenas um agente, substitua `all`:
-
-```bash
-python3 scripts/install.py --scope local --agents codex --project .
-python3 scripts/install.py --scope local --agents claude --project .
-python3 scripts/install.py --scope local --agents copilot --project .
-python3 scripts/install.py --scope local --agents antigravity --project .
-```
-
-Quando estiver executando a partir de um clone deste repositório, pré-visualize ou atualize uma instalação:
-
-```bash
-python3 scripts/install.py --scope local --agents all --project . --dry-run
-python3 scripts/install.py --scope local --agents all --project . --force
-```
-
-**Opção 2: Instalação Global Para Codex**
+**Instalação global para Codex**
 
 Use quando quiser que o Codex encontre a skill a partir de qualquer projeto. A instalação global atualmente atende apenas Codex.
 
@@ -97,10 +68,4 @@ $tmpdir = Join-Path $env:TEMP "html-presentation-skill"
 Remove-Item $tmpdir -Recurse -Force -ErrorAction SilentlyContinue
 git clone https://github.com/defreitassl/html-presentation-skill.git $tmpdir
 py "$tmpdir\scripts\install.py" --scope global --agents codex
-```
-
-Destino global do Codex:
-
-```text
-${CODEX_HOME:-$HOME/.codex}/skills/html-presentation-skill
 ```
