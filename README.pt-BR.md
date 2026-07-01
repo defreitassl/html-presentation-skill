@@ -28,8 +28,6 @@ Escolha uma opção:
 
 **Instalação local no projeto**
 
-Use quando quiser que a skill fique disponível apenas no projeto atual. Esta é a melhor opção para Claude Code, GitHub Copilot, Antigravity/agentes genéricos e uso do Codex específico do projeto.
-
 macOS/Linux:
 
 ```bash
@@ -50,8 +48,6 @@ py "$tmpdir\scripts\install.py" --scope local --agents all --project .
 Se `py` não estiver disponível no Windows, use `python`.
 
 **Instalação global**
-
-Use quando quiser que a skill fique disponível em vários projetos. Ela instala a skill globalmente para Codex e cria instruções globais de ponte para Claude Code, GitHub Copilot e Antigravity/agentes genéricos.
 
 macOS/Linux:
 
