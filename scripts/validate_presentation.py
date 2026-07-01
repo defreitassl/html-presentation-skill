@@ -3,12 +3,14 @@
 
 from __future__ import annotations
 
+import argparse
 import re
-import sys
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 
+LARGE_DATA_IMAGE_CHARS = 20_000
 PLACEHOLDER_PATTERNS = (
     re.compile(r"lorem ipsum", re.IGNORECASE),
     re.compile(r"\{\{[^}]+\}\}"),
@@ -25,38 +27,68 @@ class PresentationParser(HTMLParser):
         self._in_title = False
         self.viewport = False
         self.sections: list[str] = []
+        self.section_details: list[dict[str, object]] = []
+        self._section_stack: list[int] = []
         self.ids: list[str] = []
         self.links: list[str] = []
+        self.empty_hash_links = 0
         self.buttons: list[str] = []
         self.images_missing_alt = 0
+        self.image_sources: list[str] = []
         self.nav_count = 0
         self.h1_count = 0
         self.h2_count = 0
         self.interactive_buttons = 0
+        self.aria_controls: list[str] = []
         self._button_depth = 0
         self._button_text: list[str] = []
         self.styles = 0
         self.scripts = 0
+        self.accordion_contents: list[str] = []
+        self._accordion_capture_depth = 0
+        self._accordion_text: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attrs_dict = {key: value or "" for key, value in attrs}
+        tag = tag.lower()
+
         if tag == "title":
             self._in_title = True
         if tag == "meta" and attrs_dict.get("name") == "viewport":
             self.viewport = True
         if attrs_dict.get("id"):
             self.ids.append(attrs_dict["id"])
-        if tag == "section" and attrs_dict.get("id"):
-            self.sections.append(attrs_dict["id"])
+        if attrs_dict.get("aria-controls"):
+            self.aria_controls.append(attrs_dict["aria-controls"])
+
+        if tag == "section":
+            section_id = attrs_dict.get("id", "")
+            if section_id:
+                self.sections.append(section_id)
+            self.section_details.append({"id": section_id, "has_heading": False})
+            self._section_stack.append(len(self.section_details) - 1)
+
+        if tag in {"h1", "h2", "h3", "h4", "h5", "h6"} and self._section_stack:
+            self.section_details[self._section_stack[-1]]["has_heading"] = True
+
         if tag == "a" and attrs_dict.get("href", "").startswith("#"):
-            self.links.append(attrs_dict["href"][1:])
+            href = attrs_dict.get("href", "")
+            if href == "#":
+                self.empty_hash_links += 1
+            else:
+                self.links.append(href[1:])
+
         if tag == "button":
             self._button_depth += 1
             self._button_text = []
             if any(key in attrs_dict for key in ("aria-expanded", "aria-selected", "aria-pressed", "aria-controls")):
                 self.interactive_buttons += 1
-        if tag == "img" and "alt" not in attrs_dict:
-            self.images_missing_alt += 1
+
+        if tag == "img":
+            self.image_sources.append(attrs_dict.get("src", ""))
+            if "alt" not in attrs_dict:
+                self.images_missing_alt += 1
+
         if tag == "nav":
             self.nav_count += 1
         if tag == "h1":
@@ -68,27 +100,80 @@ class PresentationParser(HTMLParser):
         if tag == "script":
             self.scripts += 1
 
+        class_names = attrs_dict.get("class", "").split()
+        if "accordion-content" in class_names:
+            self._accordion_capture_depth = 1
+            self._accordion_text = []
+        elif self._accordion_capture_depth:
+            self._accordion_capture_depth += 1
+
     def handle_endtag(self, tag: str) -> None:
+        tag = tag.lower()
         if tag == "title":
             self._in_title = False
+        if tag == "section" and self._section_stack:
+            self._section_stack.pop()
         if tag == "button" and self._button_depth:
             self.buttons.append("".join(self._button_text).strip())
             self._button_depth -= 1
             self._button_text = []
+        if self._accordion_capture_depth:
+            self._accordion_capture_depth -= 1
+            if self._accordion_capture_depth == 0:
+                self.accordion_contents.append("".join(self._accordion_text).strip())
+                self._accordion_text = []
 
     def handle_data(self, data: str) -> None:
         if self._in_title:
             self.title += data.strip()
         if self._button_depth:
             self._button_text.append(data)
+        if self._accordion_capture_depth:
+            self._accordion_text.append(data)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Validate a standalone HTML presentation.")
+    parser.add_argument("path", help="Path to the presentation HTML file.")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Treat warnings as errors for release-ready presentations and CI.",
+    )
+    parser.add_argument(
+        "--allow-template",
+        action="store_true",
+        help="Allow intentional template placeholders such as {{TITLE}}.",
+    )
+    return parser.parse_args()
+
+
+def local_image_path(src: str, html_path: Path) -> Path | None:
+    if not src:
+        return html_path.parent
+
+    parsed = urlparse(src)
+    if parsed.scheme in {"http", "https"} or src.startswith("#"):
+        return None
+    if parsed.scheme == "data":
+        return None
+    if parsed.scheme and parsed.scheme != "file":
+        return None
+
+    raw_path = unquote(parsed.path)
+    if not raw_path:
+        return html_path.parent
+
+    candidate = Path(raw_path)
+    if not candidate.is_absolute():
+        candidate = html_path.parent / candidate
+    return candidate
 
 
 def main() -> int:
-    if len(sys.argv) != 2:
-        print("Usage: validate_presentation.py path/to/presentation.html")
-        return 2
+    args = parse_args()
 
-    path = Path(sys.argv[1])
+    path = Path(args.path)
     if not path.exists():
         print(f"ERROR: file not found: {path}")
         return 2
@@ -121,17 +206,58 @@ def main() -> int:
     if broken:
         errors.append("Broken internal anchors: " + ", ".join(f"#{item}" for item in broken))
 
+    broken_controls = sorted({control for control in parser.aria_controls if control not in document_ids})
+    if broken_controls:
+        errors.append("Broken aria-controls references: " + ", ".join(f"#{item}" for item in broken_controls))
+
+    if parser.empty_hash_links:
+        errors.append(f"{parser.empty_hash_links} link(s) use href=\"#\" without a real target.")
+
     empty_buttons = sum(1 for text in parser.buttons if not text)
     if empty_buttons:
         errors.append(f"{empty_buttons} button(s) have no text.")
     if parser.images_missing_alt:
         errors.append(f"{parser.images_missing_alt} image(s) missing alt text.")
 
+    empty_accordions = sum(1 for text in parser.accordion_contents if not text)
+    if empty_accordions:
+        errors.append(f"{empty_accordions} accordion content panel(s) are empty.")
+
+    missing_section_headings = [
+        str(detail.get("id") or index + 1)
+        for index, detail in enumerate(parser.section_details)
+        if not detail.get("has_heading")
+    ]
+    if missing_section_headings:
+        warnings.append("Section(s) without heading: " + ", ".join(missing_section_headings))
+
+    missing_local_images: list[str] = []
+    large_data_images = 0
+    for src in parser.image_sources:
+        if src.startswith("data:image") and len(src) > LARGE_DATA_IMAGE_CHARS:
+            large_data_images += 1
+            continue
+        local_path = local_image_path(src, path)
+        if local_path is None:
+            continue
+        try:
+            exists = local_path.exists()
+        except OSError:
+            exists = False
+        if not exists:
+            missing_local_images.append(src or "<empty src>")
+
+    if missing_local_images:
+        errors.append("Missing local image source(s): " + ", ".join(missing_local_images))
+    if large_data_images:
+        warnings.append(f"{large_data_images} large base64 image(s) found; prefer relative asset files.")
+
     found_placeholders = [pattern.pattern for pattern in PLACEHOLDER_PATTERNS if pattern.search(html)]
-    if found_placeholders:
+    if found_placeholders and not args.allow_template:
         errors.append("Unresolved placeholder markers found: " + ", ".join(found_placeholders))
 
-    if re.search(r"font-size\s*:\s*[^;]*(vw|vh)", html):
+    font_size_values = re.findall(r"font-size\s*:\s*([^;]+);", html, flags=re.IGNORECASE)
+    if any(("vw" in value or "vh" in value) and "clamp(" not in value.lower() for value in font_size_values):
         warnings.append("Viewport-based font sizing found; prefer clamp/rem for stable text.")
     if ":root" not in html:
         warnings.append("No :root theme tokens found; define CSS variables for a coherent visual system.")
@@ -147,6 +273,10 @@ def main() -> int:
         warnings.append("Long presentation has no <nav> element.")
     if parser.buttons and parser.interactive_buttons == 0:
         warnings.append("Buttons found without ARIA state/control attributes.")
+
+    if args.strict and warnings:
+        errors.extend(f"Strict mode: {warning}" for warning in warnings)
+        warnings = []
 
     for error in errors:
         print(f"ERROR: {error}")

@@ -97,6 +97,8 @@ Wrap tables in a scroll container:
 table { min-width: 720px; }
 ```
 
+Include a short interpretation before or after the table so the table has a clear reason to exist. Keep wide comparison tables out of the main mobile scan path unless the wrapper is present.
+
 ## Closing Section
 
 End with practical closure:

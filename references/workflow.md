@@ -1,5 +1,16 @@
 # Workflow
 
+## Fast Execution Checklist
+
+1. Read the source and identify audience, goal, language, constraints, and output path.
+2. Decide style preset and brand handling; scan assets when useful.
+3. Build a compact internal narrative matrix before writing HTML.
+4. Select section patterns that match the content.
+5. Generate one standalone HTML file with embedded CSS and JavaScript.
+6. Run `scripts/validate_presentation.py`.
+7. Inspect desktop and mobile layout when practical.
+8. Fix blocking issues and report the file path plus validation result.
+
 ## 1. Intake
 
 Identify:
@@ -14,6 +25,8 @@ Identify:
 If the user gives no filename, choose a descriptive kebab-case name.
 
 If the user does not specify style, ask one concise question with preset options. If the user wants fast execution or gives no answer, choose a preset based on the audience and content.
+
+Use `references/agent-decisions.md` for default choices when the user leaves details unspecified.
 
 For brand identity, prefer this order:
 

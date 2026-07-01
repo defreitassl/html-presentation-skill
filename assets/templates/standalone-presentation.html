@@ -8,15 +8,19 @@
     :root {
       --bg: #f5f7fb;
       --surface: #ffffff;
+      --surface-2: #e8eef6;
       --ink: #142033;
       --muted: #536273;
       --line: #d8e0ea;
       --primary: #2563eb;
       --accent: #0f8f72;
+      --success: #168a5f;
       --warning: #b7791f;
+      --danger: #b83b45;
       --dark: #111827;
       --radius: 8px;
       --shadow: 0 16px 42px rgba(20, 32, 51, .10);
+      --section-pad: clamp(52px, 7vw, 82px);
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -28,10 +32,10 @@
       line-height: 1.5;
     }
     a { color: inherit; text-decoration: none; }
-    button { font: inherit; }
+    button { font: inherit; cursor: pointer; }
     a:focus-visible,
     button:focus-visible {
-      outline: 3px solid rgba(37, 99, 235, .75);
+      outline: 3px solid rgba(37, 99, 235, .72);
       outline-offset: 3px;
     }
     .progress {
@@ -41,11 +45,11 @@
       transform-origin: left;
       transform: scaleX(0);
       background: linear-gradient(90deg, var(--primary), var(--accent));
-      z-index: 10;
+      z-index: 20;
     }
     .app {
       display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
+      grid-template-columns: 286px minmax(0, 1fr);
       min-height: 100vh;
     }
     .sidebar {
@@ -56,67 +60,209 @@
       background: var(--dark);
       color: #edf3ff;
       overflow-y: auto;
+      z-index: 10;
     }
     .brand {
-      padding-bottom: 20px;
+      display: grid;
+      gap: 12px;
+      padding: 8px 6px 22px;
       margin-bottom: 18px;
       border-bottom: 1px solid rgba(255,255,255,.12);
     }
-    .brand strong { display: block; font-size: 18px; }
-    .brand span { display: block; color: #aeb9c9; font-size: 12px; margin-top: 4px; }
-    .nav { display: grid; gap: 5px; }
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, var(--primary) 0 48%, transparent 48%),
+        linear-gradient(45deg, var(--accent) 0 42%, #f1b24a 42%);
+      box-shadow: 0 12px 28px rgba(0,0,0,.24);
+    }
+    .brand strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.08;
+    }
+    .brand span {
+      display: block;
+      color: #aeb9c9;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .nav {
+      display: grid;
+      gap: 5px;
+    }
     .nav a {
       display: flex;
       gap: 10px;
       align-items: center;
+      min-height: 40px;
       padding: 10px 11px;
       border-radius: var(--radius);
       color: #c7d1e2;
       font-size: 14px;
     }
     .nav a:hover,
-    .nav a.active { background: rgba(255,255,255,.10); color: #fff; }
+    .nav a.active {
+      background: rgba(255,255,255,.10);
+      color: #fff;
+    }
     .dot {
       width: 8px;
       height: 8px;
+      flex: 0 0 auto;
       border-radius: 50%;
       background: currentColor;
       opacity: .75;
     }
     main { min-width: 0; }
-    section { padding: 72px clamp(20px, 5vw, 76px); }
-    .section-inner { max-width: 1180px; margin: 0 auto; }
+    section {
+      padding: var(--section-pad) clamp(20px, 5vw, 76px);
+      position: relative;
+    }
+    .section-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
     .hero {
       min-height: 82vh;
       display: grid;
       align-items: center;
       color: #fff;
       background:
-        linear-gradient(90deg, rgba(17,24,39,.95), rgba(17,24,39,.72)),
+        linear-gradient(90deg, rgba(17,24,39,.96), rgba(17,24,39,.72)),
         linear-gradient(135deg, #132238, #22455f 56%, #17483e);
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, .94fr);
+      gap: clamp(28px, 5vw, 64px);
+      align-items: center;
     }
     .eyebrow {
       color: #93e7d0;
       text-transform: uppercase;
       font-weight: 900;
       font-size: 12px;
-      letter-spacing: .08em;
+      letter-spacing: 0;
       margin-bottom: 14px;
     }
-    h1, h2, h3 { margin: 0; line-height: 1.05; letter-spacing: 0; }
-    h1 { font-size: clamp(42px, 7vw, 88px); max-width: 880px; }
-    h2 { font-size: clamp(30px, 4vw, 52px); }
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    h1 {
+      font-size: 72px;
+      max-width: 880px;
+    }
+    h2 { font-size: 44px; }
     h3 { font-size: 20px; }
+    p { margin: 0; }
     .lead {
       color: var(--muted);
       font-size: 17px;
       max-width: 780px;
       margin-top: 12px;
     }
-    .hero .lead { color: #d8e2ef; font-size: clamp(17px, 2vw, 21px); }
+    .hero .lead {
+      color: #d8e2ef;
+      font-size: 20px;
+    }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+    .tag {
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 999px;
+      padding: 7px 11px;
+      color: #e8f1fb;
+      background: rgba(255,255,255,.08);
+      font-size: 13px;
+    }
+    .signal-board {
+      min-height: 360px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 22px 60px rgba(0,0,0,.22);
+    }
+    .signal-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+      color: #d7e2ef;
+      font-size: 13px;
+    }
+    .signal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .signal-card,
+    .signal-flow {
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: rgba(17, 24, 39, .48);
+      min-height: 112px;
+    }
+    .signal-card b,
+    .signal-flow b {
+      display: block;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .signal-line {
+      height: 8px;
+      border-radius: 999px;
+      margin-top: 9px;
+      background: rgba(255,255,255,.14);
+      overflow: hidden;
+    }
+    .signal-line span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+    .signal-flow {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+    .node {
+      display: grid;
+      place-items: center;
+      min-height: 66px;
+      border-radius: var(--radius);
+      color: #e8f1fb;
+      background: rgba(255,255,255,.10);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+    }
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
       margin-top: 28px;
     }
@@ -127,8 +273,57 @@
       padding: 20px;
       box-shadow: 0 10px 24px rgba(20, 32, 51, .06);
     }
-    .card p { color: var(--muted); margin: 8px 0 0; }
-    .dark-band { background: var(--dark); color: #fff; }
+    .card p {
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .metric {
+      display: block;
+      color: var(--primary);
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .map-band {
+      background: var(--surface-2);
+    }
+    .operating-map {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+      align-items: stretch;
+    }
+    .map-column {
+      display: grid;
+      gap: 12px;
+    }
+    .map-hub {
+      display: grid;
+      place-items: center;
+      min-height: 260px;
+      border: 2px solid rgba(37, 99, 235, .28);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-align: center;
+      padding: 24px;
+    }
+    .map-hub strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+    .map-hub span {
+      display: block;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+    .dark-band {
+      background: var(--dark);
+      color: #fff;
+    }
     .dark-band .lead { color: #c8d3e4; }
     .timeline {
       display: grid;
@@ -137,20 +332,64 @@
     }
     .step {
       display: grid;
-      grid-template-columns: 68px 1fr;
+      grid-template-columns: 72px 1fr;
       gap: 14px;
       align-items: start;
-      background: var(--surface);
-      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
       border-radius: var(--radius);
       padding: 16px;
     }
     .step b {
-      color: var(--primary);
+      color: #93e7d0;
       font-variant-numeric: tabular-nums;
     }
-    .step span { color: var(--muted); }
-    .accordion { display: grid; gap: 10px; margin-top: 24px; }
+    .step span { color: #d8e2ef; }
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 10px 24px rgba(20, 32, 51, .06);
+    }
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #eef3fb;
+      color: var(--ink);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    tr:last-child td { border-bottom: 0; }
+    td { color: var(--muted); }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--success);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .status.warning { background: var(--warning); }
+    .accordion {
+      display: grid;
+      gap: 10px;
+      margin-top: 24px;
+    }
     .accordion-item {
       background: var(--surface);
       border: 1px solid var(--line);
@@ -159,6 +398,7 @@
     }
     .accordion-button {
       width: 100%;
+      min-height: 56px;
       border: 0;
       background: transparent;
       color: var(--ink);
@@ -168,7 +408,10 @@
       display: flex;
       justify-content: space-between;
       gap: 16px;
-      cursor: pointer;
+    }
+    .accordion-button span {
+      flex: 0 0 auto;
+      color: var(--primary);
     }
     .accordion-content {
       display: none;
@@ -176,49 +419,137 @@
       color: var(--muted);
     }
     .accordion-item.open .accordion-content { display: block; }
-    @media (max-width: 900px) {
+    @media (max-width: 980px) {
       .app { display: block; }
       .sidebar { position: static; height: auto; }
       .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .grid-3 { grid-template-columns: 1fr; }
+      .hero-grid,
+      .operating-map,
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .signal-board { min-height: 0; }
       section { padding: 52px 20px; }
+    }
+    @media (max-width: 620px) {
+      .nav { grid-template-columns: 1fr; }
+      h1 { font-size: 42px; }
+      h2 { font-size: 30px; }
+      .hero .lead { font-size: 17px; }
+      .signal-grid,
+      .signal-flow {
+        grid-template-columns: 1fr;
+      }
+      .step {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="progress" id="progress"></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
-        <strong>{{TITLE}}</strong>
-        <span>{{SUBTITLE}}</span>
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <strong>{{TITLE}}</strong>
+          <span>{{SUBTITLE}}</span>
+        </div>
       </div>
       <nav class="nav" aria-label="Navegação da apresentação">
         <a href="#inicio" class="active"><span class="dot"></span> Início</a>
         <a href="#resumo"><span class="dot"></span> Resumo</a>
+        <a href="#modelo"><span class="dot"></span> Modelo</a>
         <a href="#plano"><span class="dot"></span> Plano</a>
+        <a href="#evidencias"><span class="dot"></span> Evidências</a>
         <a href="#proximos"><span class="dot"></span> Próximos passos</a>
       </nav>
     </aside>
     <main>
       <section class="hero" id="inicio">
-        <div class="section-inner">
-          <div class="eyebrow">{{EYEBROW}}</div>
-          <h1>{{TITLE}}</h1>
-          <p class="lead">{{INTRO}}</p>
+        <div class="section-inner hero-grid">
+          <div>
+            <div class="eyebrow">{{EYEBROW}}</div>
+            <h1>{{TITLE}}</h1>
+            <p class="lead">{{INTRO}}</p>
+            <div class="tag-row" aria-label="Sinais principais">
+              <span class="tag">{{TAG_1}}</span>
+              <span class="tag">{{TAG_2}}</span>
+              <span class="tag">{{TAG_3}}</span>
+            </div>
+          </div>
+          <div class="signal-board" aria-label="Composição visual do tema">
+            <div class="signal-top">
+              <strong>{{VISUAL_TITLE}}</strong>
+              <span>{{VISUAL_STATUS}}</span>
+            </div>
+            <div class="signal-grid">
+              <div class="signal-card">
+                <b>{{SIGNAL_1_TITLE}}</b>
+                <p>{{SIGNAL_1_TEXT}}</p>
+                <div class="signal-line"><span style="width: 76%"></span></div>
+              </div>
+              <div class="signal-card">
+                <b>{{SIGNAL_2_TITLE}}</b>
+                <p>{{SIGNAL_2_TEXT}}</p>
+                <div class="signal-line"><span style="width: 58%"></span></div>
+              </div>
+              <div class="signal-flow" aria-label="Fluxo de operação">
+                <div class="node">{{FLOW_1}}</div>
+                <div class="node">{{FLOW_2}}</div>
+                <div class="node">{{FLOW_3}}</div>
+                <div class="node">{{FLOW_4}}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
+
       <section id="resumo">
         <div class="section-inner">
           <h2>{{SUMMARY_HEADING}}</h2>
           <p class="lead">{{SUMMARY_LEAD}}</p>
           <div class="grid-3">
-            <article class="card"><h3>{{CARD_1_TITLE}}</h3><p>{{CARD_1_TEXT}}</p></article>
-            <article class="card"><h3>{{CARD_2_TITLE}}</h3><p>{{CARD_2_TEXT}}</p></article>
-            <article class="card"><h3>{{CARD_3_TITLE}}</h3><p>{{CARD_3_TEXT}}</p></article>
+            <article class="card"><span class="metric">{{METRIC_1}}</span><h3>{{CARD_1_TITLE}}</h3><p>{{CARD_1_TEXT}}</p></article>
+            <article class="card"><span class="metric">{{METRIC_2}}</span><h3>{{CARD_2_TITLE}}</h3><p>{{CARD_2_TEXT}}</p></article>
+            <article class="card"><span class="metric">{{METRIC_3}}</span><h3>{{CARD_3_TITLE}}</h3><p>{{CARD_3_TEXT}}</p></article>
           </div>
         </div>
       </section>
+
+      <section class="map-band" id="modelo">
+        <div class="section-inner">
+          <h2>{{MODEL_HEADING}}</h2>
+          <p class="lead">{{MODEL_LEAD}}</p>
+          <div class="operating-map">
+            <div class="map-column">
+              <article class="card"><h3>{{INPUT_1_TITLE}}</h3><p>{{INPUT_1_TEXT}}</p></article>
+              <article class="card"><h3>{{INPUT_2_TITLE}}</h3><p>{{INPUT_2_TEXT}}</p></article>
+            </div>
+            <div class="map-hub">
+              <div>
+                <strong>{{HUB_TITLE}}</strong>
+                <span>{{HUB_TEXT}}</span>
+              </div>
+            </div>
+            <div class="map-column">
+              <article class="card"><h3>{{OUTPUT_1_TITLE}}</h3><p>{{OUTPUT_1_TEXT}}</p></article>
+              <article class="card"><h3>{{OUTPUT_2_TITLE}}</h3><p>{{OUTPUT_2_TEXT}}</p></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="dark-band" id="plano">
         <div class="section-inner">
           <h2>{{PLAN_HEADING}}</h2>
@@ -227,17 +558,66 @@
             <div class="step"><b>01</b><span>{{STEP_1}}</span></div>
             <div class="step"><b>02</b><span>{{STEP_2}}</span></div>
             <div class="step"><b>03</b><span>{{STEP_3}}</span></div>
+            <div class="step"><b>04</b><span>{{STEP_4}}</span></div>
           </div>
         </div>
       </section>
+
+      <section id="evidencias">
+        <div class="section-inner">
+          <h2>{{EVIDENCE_HEADING}}</h2>
+          <p class="lead">{{EVIDENCE_LEAD}}</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{TABLE_COL_1}}</th>
+                  <th>{{TABLE_COL_2}}</th>
+                  <th>{{TABLE_COL_3}}</th>
+                  <th>{{TABLE_COL_4}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ROW_1_LABEL}}</td>
+                  <td>{{ROW_1_DETAIL}}</td>
+                  <td><span class="status">{{ROW_1_STATUS}}</span></td>
+                  <td>{{ROW_1_NEXT}}</td>
+                </tr>
+                <tr>
+                  <td>{{ROW_2_LABEL}}</td>
+                  <td>{{ROW_2_DETAIL}}</td>
+                  <td><span class="status warning">{{ROW_2_STATUS}}</span></td>
+                  <td>{{ROW_2_NEXT}}</td>
+                </tr>
+                <tr>
+                  <td>{{ROW_3_LABEL}}</td>
+                  <td>{{ROW_3_DETAIL}}</td>
+                  <td><span class="status">{{ROW_3_STATUS}}</span></td>
+                  <td>{{ROW_3_NEXT}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <section id="proximos">
         <div class="section-inner">
           <h2>{{NEXT_HEADING}}</h2>
           <p class="lead">{{NEXT_LEAD}}</p>
           <div class="accordion">
             <article class="accordion-item open">
-              <button class="accordion-button" aria-expanded="true">Decisão principal <span>+</span></button>
-              <div class="accordion-content">{{DECISION_DETAIL}}</div>
+              <button class="accordion-button" type="button" aria-expanded="true" aria-controls="decision-panel">
+                {{DECISION_TITLE}} <span aria-hidden="true">+</span>
+              </button>
+              <div class="accordion-content" id="decision-panel">{{DECISION_DETAIL}}</div>
+            </article>
+            <article class="accordion-item">
+              <button class="accordion-button" type="button" aria-expanded="false" aria-controls="risk-panel">
+                {{RISK_TITLE}} <span aria-hidden="true">+</span>
+              </button>
+              <div class="accordion-content" id="risk-panel">{{RISK_DETAIL}}</div>
             </article>
           </div>
         </div>
@@ -264,9 +644,17 @@
     document.querySelectorAll('.accordion-button').forEach((button) => {
       button.addEventListener('click', () => {
         const item = button.closest('.accordion-item');
+        const panel = document.getElementById(button.getAttribute('aria-controls'));
         const open = item.classList.toggle('open');
         button.setAttribute('aria-expanded', String(open));
+        if (panel) {
+          panel.hidden = !open;
+        }
       });
+      const panel = document.getElementById(button.getAttribute('aria-controls'));
+      if (panel) {
+        panel.hidden = button.getAttribute('aria-expanded') !== 'true';
+      }
     });
 
     window.addEventListener('scroll', () => {

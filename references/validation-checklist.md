@@ -10,6 +10,18 @@ python3 scripts/validate_presentation.py path/to/file.html
 
 Fix errors before final response. Review warnings and fix the ones that affect quality.
 
+For examples, public artifacts, and final deliverables that should be release-ready, run:
+
+```bash
+python3 scripts/validate_presentation.py path/to/file.html --strict
+```
+
+For bundled templates that intentionally contain `{{PLACEHOLDER}}` markers, run:
+
+```bash
+python3 scripts/validate_presentation.py assets/templates/standalone-presentation.html --allow-template
+```
+
 ## Manual
 
 Check:
@@ -19,6 +31,7 @@ Check:
 - Navigation links all land on real sections.
 - Mobile layout does not overlap or clip important text.
 - Buttons and controls have visible hover/focus/active states.
+- ARIA references such as `aria-controls` point to real element IDs.
 - Tables scroll horizontally on small screens.
 - No section feels like filler.
 - The final section gives useful next steps or closure.

@@ -19,6 +19,22 @@ Build a standalone HTML presentation from source material.
 8. Validate the file before handing it off.
 
 Read `references/workflow.md` for the full execution sequence.
+Read `references/agent-decisions.md` when the user leaves filename, language, style, validation depth, or asset handling unspecified.
+
+## Minimum Acceptance Criteria
+
+Before final response, verify that the output meets these criteria:
+
+- One standalone `.html` file is produced by default, with embedded CSS and JavaScript unless the user requested a framework.
+- The document has `<title>`, responsive viewport metadata, one primary `<h1>`, semantic sections, and CSS variables in `:root`.
+- Long presentations have internal navigation, working anchors, scroll progress, and active navigation state when practical.
+- The first viewport identifies the subject, audience/context, and main promise while showing a hint of the next section.
+- At least one custom visual composition reflects the domain, such as a dashboard, process map, role map, document viewer, system diagram, or score panel.
+- Interactive controls have visible state, keyboard-operable elements, and appropriate ARIA attributes.
+- Tables and wide diagrams have horizontal overflow handling on small screens.
+- No placeholder copy, broken internal anchors, empty buttons, missing image alt text, unsupported factual claims, or fake data presented as real remain.
+- `scripts/validate_presentation.py path/to/file.html` has been run, and blocking errors have been fixed.
+- Final response includes the output path and validation result.
 
 ## Output Standard
 
@@ -115,6 +131,12 @@ Use:
 
 ```bash
 python3 scripts/validate_presentation.py path/to/presentation.html
+```
+
+For release-ready or example presentations, prefer:
+
+```bash
+python3 scripts/validate_presentation.py path/to/presentation.html --strict
 ```
 
 Read `references/validation-checklist.md` for manual review criteria.
