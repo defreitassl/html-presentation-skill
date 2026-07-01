@@ -111,17 +111,23 @@ def install_claude(scope: str, project: Path, *, dry_run: bool) -> Path:
 
 def install_copilot(scope: str, project: Path, *, dry_run: bool) -> Path:
     if scope == "global":
-        raise ValueError("GitHub Copilot repository instructions are local to a repository. Use --scope local for copilot.")
-    path = project / ".github" / "copilot-instructions.md"
-    upsert_marked_block(path, "HTML Presentation Skill", bridge_body(f".codex/skills/{SKILL_NAME}"), dry_run=dry_run)
+        path = Path.home() / ".github" / "copilot-instructions.md"
+        skill_path = f"{Path.home() / '.codex' / 'skills' / SKILL_NAME}"
+    else:
+        path = project / ".github" / "copilot-instructions.md"
+        skill_path = f".codex/skills/{SKILL_NAME}"
+    upsert_marked_block(path, "HTML Presentation Skill", bridge_body(skill_path), dry_run=dry_run)
     return path
 
 
 def install_antigravity(scope: str, project: Path, *, dry_run: bool) -> Path:
     if scope == "global":
-        raise ValueError("Antigravity project instructions are best installed locally. Use --scope local for antigravity.")
-    path = project / "AGENTS.md"
-    upsert_marked_block(path, "HTML Presentation Skill", bridge_body(f".codex/skills/{SKILL_NAME}"), dry_run=dry_run)
+        path = Path.home() / ".agents" / "AGENTS.md"
+        skill_path = f"{Path.home() / '.codex' / 'skills' / SKILL_NAME}"
+    else:
+        path = project / "AGENTS.md"
+        skill_path = f".codex/skills/{SKILL_NAME}"
+    upsert_marked_block(path, "HTML Presentation Skill", bridge_body(skill_path), dry_run=dry_run)
     return path
 
 

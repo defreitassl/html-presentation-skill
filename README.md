@@ -49,16 +49,16 @@ py "$tmpdir\scripts\install.py" --scope local --agents all --project .
 
 If `py` is not available on Windows, use `python`.
 
-**Global Codex install**
+**Global install**
 
-Use this when you want Codex to find the skill from any project. Global install currently targets Codex only.
+Use this when you want the skill available across projects. It installs the Codex skill globally and creates global bridge instructions for Claude Code, GitHub Copilot, and Antigravity/generic agents.
 
 macOS/Linux:
 
 ```bash
 tmpdir="$(mktemp -d)"
 git clone https://github.com/defreitassl/html-presentation-skill.git "$tmpdir"
-python3 "$tmpdir/scripts/install.py" --scope global --agents codex
+python3 "$tmpdir/scripts/install.py" --scope global --agents all
 ```
 
 Windows PowerShell:
@@ -67,5 +67,5 @@ Windows PowerShell:
 $tmpdir = Join-Path $env:TEMP "html-presentation-skill"
 Remove-Item $tmpdir -Recurse -Force -ErrorAction SilentlyContinue
 git clone https://github.com/defreitassl/html-presentation-skill.git $tmpdir
-py "$tmpdir\scripts\install.py" --scope global --agents codex
+py "$tmpdir\scripts\install.py" --scope global --agents all
 ```
